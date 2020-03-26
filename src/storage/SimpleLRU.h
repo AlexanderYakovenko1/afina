@@ -27,9 +27,6 @@ public:
         }
     }
 
-    // Deleted last recently used list entries
-    bool CleanUp(std::size_t size);
-
     // Implements Afina::Storage interface
     bool Put(const std::string &key, const std::string &value) override;
 
@@ -70,6 +67,13 @@ private:
 
     // Index of nodes from list above, allows fast random access to elements by lru_node#key
     std::map<std::reference_wrapper<const std::string>, std::reference_wrapper<lru_node>, std::less<std::string>> _lru_index;
+
+    // Delete last recently used list entries
+    bool CleanUp(std::size_t size, const std::string &skip);
+
+    bool PutNode(const std::string &key, const std::string &value);
+
+    bool SetNode(lru_node &found, const std::string &value);
 };
 
 } // namespace Backend
